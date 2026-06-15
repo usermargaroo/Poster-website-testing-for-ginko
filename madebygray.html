@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MadeByGray — Ginko Posters</title>
+
+  <style>
+    @font-face {
+      font-family: 'Ginkopostersvol2';
+      src: url('Ginkopostersvol2-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --off-white: #f0ece4;
+      --black: #0e0e0e;
+      --mid-gray: #888;
+      --light-gray: #dedad3;
+      --font-display: 'Barlow Condensed', sans-serif;
+      --font-artist: 'Ginkopostersvol2', 'Barlow Condensed', sans-serif;
+      --font-body: 'Barlow', sans-serif;
+      --nav-h: 60px;
+      --runner-h: 30px;
+      --header-h: 90px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    img { display: block; max-width: 100%; }
+    a { text-decoration: none; color: inherit; }
+
+    body {
+      background: var(--off-white);
+      color: var(--black);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.5;
+      padding-top: var(--header-h);
+      overflow-x: hidden;
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.055;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 200px 200px;
+    }
+
+    /* ── Nav ─────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      z-index: 200;
+      background: rgba(240, 236, 228, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .nav-artist-name {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--black);
+    }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    .nav-right img {
+      height: 36px;
+      width: auto;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--black);
+    }
+    .nav-links a:hover { opacity: 0.5; }
+    .nav-cart { display: flex; align-items: center; color: var(--black); transition: opacity 0.2s; position: relative; }
+    .nav-cart:hover { opacity: 0.5; }
+    .cart-badge { position: absolute; top: -7px; right: -8px; min-width: 15px; height: 15px; background: var(--black); color: var(--off-white); font-family: var(--font-display); font-size: 9px; font-weight: 800; border-radius: 8px; display: none; align-items: center; justify-content: center; padding: 0 3px; pointer-events: none; }
+    .cart-badge.visible { display: flex; }
+
+    /* ── Promo runner ─────────────────────────────────────── */
+    .promo-runner {
+      position: fixed;
+      top: var(--nav-h);
+      left: 0; right: 0;
+      height: var(--runner-h);
+      background: var(--off-white);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      z-index: 199;
+    }
+    .runner-track {
+      display: flex;
+      white-space: nowrap;
+      animation: runner 55s linear infinite;
+    }
+    .runner-track span {
+      font-family: var(--font-display);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--mid-gray);
+      padding: 0 48px;
+      flex-shrink: 0;
+    }
+    .runner-track span strong { color: var(--black); font-weight: 700; }
+    .runner-track span::after { content: ' · '; opacity: 0.35; padding-left: 48px; }
+    @keyframes runner {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── Hero ───────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+    }
+    .hero-img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.25) 0%,
+        rgba(0,0,0,0.05) 40%,
+        rgba(0,0,0,0.6) 100%
+      );
+    }
+    .hero-text {
+      position: absolute;
+      bottom: 60px;
+      left: 40px;
+      right: 40px;
+      color: var(--off-white);
+    }
+    .hero-text .eyebrow {
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      opacity: 0.75;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-text .eyebrow::before {
+      content: '';
+      width: 30px;
+      height: 1px;
+      background: rgba(242,239,233,0.7);
+    }
+    .hero-text h1 {
+      font-family: var(--font-artist);
+      font-size: clamp(52px, 8vw, 100px);
+      font-weight: 800;
+      line-height: 0.9;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+    }
+    .back-link {
+      position: absolute;
+      top: 24px;
+      left: 40px;
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(242,239,233,0.8);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--off-white); }
+    .back-link::before { content: '←'; }
+
+    /* ── Product grid ───────────────────────────────────────── */
+    .grid-section {
+      padding: 28px 40px 100px;
+    }
+    .grid-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+    .collection-title {
+      font-family: var(--font-display);
+      font-size: clamp(22px, 2.5vw, 30px);
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--black);
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .product-card { display: block; cursor: pointer; }
+    .product-card-img {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 2 / 3;
+      background: var(--light-gray);
+      margin-bottom: 14px;
+    }
+    .product-card-img img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transition: opacity 0.4s ease, transform 0.6s ease;
+    }
+    .product-card-img .img-default { opacity: 1; }
+    .product-card-img .img-hover  { opacity: 0; }
+    .product-card:hover .img-default { opacity: 0; transform: scale(1.03); }
+    .product-card:hover .img-hover  { opacity: 1; }
+
+    .product-card-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .product-card-name {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .product-card-meta {
+      font-size: 12px;
+      color: var(--mid-gray);
+      margin-top: 3px;
+      letter-spacing: 0.05em;
+    }
+    .product-card-price {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Footer ─────────────────────────────────────────────── */
+    footer {
+      background: var(--black);
+      padding: 0 44px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-brand {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--off-white);
+    }
+    .footer-links {
+      display: flex;
+      gap: 28px;
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(240,236,228,0.55);
+    }
+    .footer-links a:hover { color: var(--off-white); }
+    .footer-copy {
+      font-family: var(--font-display);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: rgba(240,236,228,0.4);
+    }
+
+    /* ── Fade-up ────────────────────────────────────────────── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: none; }
+    .fade-up:nth-child(2) { transition-delay: 0.05s; }
+    .fade-up:nth-child(3) { transition-delay: 0.1s; }
+    .fade-up:nth-child(4) { transition-delay: 0.15s; }
+
+    /* ── Responsive ─────────────────────────────────────────── */
+    @media (max-width: 1024px) { .product-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 768px) {
+      .product-grid { grid-template-columns: repeat(2, 1fr); }
+      nav { padding: 0 20px; }
+      .hero-text { left: 20px; right: 20px; }
+      .back-link { left: 20px; }
+      .grid-section { padding: 20px 20px 60px; }
+    }
+  </style>
+</head>
+<body data-artist="madebygray">
+
+  <!-- ── Nav ──────────────────────────────────────────────── -->
+  <nav id="nav">
+    <span class="nav-artist-name" id="nav-artist-name">MadeByGray</span>
+    <div class="nav-right">
+      <a href="index.html"><img src="ginko-logo.png" alt="Ginko Posters"></a>
+      <div class="nav-links">
+        <a href="index.html">Shop</a>
+        <a href="support.html">Support</a>
+        <a href="cart.html" class="nav-cart">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
+          </svg>
+          <span class="cart-badge" id="cart-badge"></span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── Promo runner ──────────────────────────────────────── -->
+  <div class="promo-runner">
+    <div class="runner-track">
+      <span><strong>15% Off</strong> When You Order 2 Or More</span>
+      <span><strong>15% Off</strong> When You Order 2 Or More</span>
+      <span><strong>15% Off</strong> When You Order 2 Or More</span>
+      <span><strong>15% Off</strong> When You Order 2 Or More</span>
+      <span><strong>15% Off</strong> When You Order 2 Or More</span>
+      <span><strong>15% Off</strong> When You Order 2 Or More</span>
+      <span><strong>15% Off</strong> When You Order 2 Or More</span>
+      <span><strong>15% Off</strong> When You Order 2 Or More</span>
+    </div>
+  </div>
+
+  <!-- ── Hero ─────────────────────────────────────────────── -->
+  <section class="hero">
+    <img class="hero-img" id="hero-img" src="MadeByGray Poster Files/madebygray-hero.jpg" alt="MadeByGray">
+    <div class="hero-overlay"></div>
+    <a href="index.html" class="back-link">Back to Shop</a>
+    <div class="hero-text">
+      <div class="eyebrow" id="artist-tagline">Editorial Fashion Art</div>
+      <h1 id="artist-name-display">Made<br>By<br>Gray</h1>
+    </div>
+  </section>
+
+  <!-- ── Product grid ─────────────────────────────────────── -->
+  <section class="grid-section">
+    <div class="grid-header">
+      <span class="collection-title">The Collection</span>
+    </div>
+    <div class="product-grid" id="product-grid">
+      <!-- Populated by JS -->
+    </div>
+  </section>
+
+  <!-- ── Footer ────────────────────────────────────────────── -->
+  <footer>
+    <span class="footer-brand" id="footer-brand">MadeByGray</span>
+    <div class="footer-links">
+      <a href="index.html">All Products</a>
+      <a href="cart.html">Cart</a>
+      <a href="support.html">Support</a>
+      <a href="index.html#artists">Artists</a>
+      <a href="legal.html">Legal</a>
+    </div>
+    <span class="footer-copy">© 2026 GinkoPosters</span>
+  </footer>
+
+  <script>
+    // ── Cart badge ──────────────────────────────────────────
+    (function(){ try { const c=JSON.parse(localStorage.getItem('ginko_cart'))||[]; const n=c.reduce((s,i)=>s+i.qty,0); const b=document.getElementById('cart-badge'); if(b&&n>0){b.textContent=n;b.classList.add('visible');} } catch{} })();
+
+    // ── Fade-up observer ────────────────────────────────────
+    const observer = new IntersectionObserver(
+      entries => entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+      }),
+      { threshold: 0.08 }
+    );
+
+    // ── API-driven content ──────────────────────────────────
+    const artistId = document.body.dataset.artist;
+
+    async function loadPage() {
+      const [artistRes, productsRes] = await Promise.all([
+        fetch(`/api/artists/${artistId}`),
+        fetch(`/api/products?artistId=${artistId}`)
+      ]);
+
+      if (artistRes.ok) {
+        const a = await artistRes.json();
+        const heroImg = document.getElementById('hero-img');
+        if (heroImg && a.heroImage) {
+          heroImg.src = a.heroImage;
+          heroImg.alt = a.name;
+        }
+        const taglineEl = document.getElementById('artist-tagline');
+        if (taglineEl) taglineEl.textContent = a.tagline || '';
+
+        const nameEl = document.getElementById('artist-name-display');
+        if (nameEl) {
+          const parts = a.name.split(' ');
+          nameEl.innerHTML = parts.length > 1 ? parts[0] + '<br>' + parts.slice(1).join(' ') : a.name;
+        }
+
+        const navName = document.getElementById('nav-artist-name');
+        if (navName) navName.textContent = a.name;
+        const footerBrand = document.getElementById('footer-brand');
+        if (footerBrand) footerBrand.textContent = a.name;
+
+        document.title = `${a.name} — Ginko Posters`;
+      }
+
+      if (productsRes.ok) {
+        const products = await productsRes.json();
+        const grid = document.getElementById('product-grid');
+        if (!grid) return;
+
+        if (!products.length) {
+          grid.innerHTML = '<p style="color:var(--mid-gray);font-size:14px;">No products yet.</p>';
+          return;
+        }
+
+        grid.innerHTML = products.map(p => {
+          const img0 = p.images?.[0] || '';
+          const img1 = p.images?.[1] || img0;
+          return `
+            <a href="product.html?p=${p.id}" class="product-card fade-up">
+              <div class="product-card-img">
+                <img class="img-default" src="${img0}" alt="${p.name}" loading="lazy">
+                <img class="img-hover"   src="${img1}" alt="${p.name} — wall view" loading="lazy">
+              </div>
+              <div class="product-card-info">
+                <div>
+                  <div class="product-card-name">${p.name}</div>
+                  <div class="product-card-meta">Fine art print · A1 / A2 / A3</div>
+                </div>
+                <div class="product-card-price">Shop →</div>
+              </div>
+            </a>`;
+        }).join('');
+
+        grid.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+      }
+    }
+
+    loadPage();
+  </script>
+
+</body>
+</html>

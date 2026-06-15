@@ -1,0 +1,152 @@
+{
+  "artists": [
+    {
+      "id": "laz-lewis",
+      "name": "Laz Lewis",
+      "tagline": "Adventure Photography",
+      "heroImage": "Lazlewis landing page.jpg",
+      "page": "laz-lewis.html"
+    },
+    {
+      "id": "madebygray",
+      "name": "MadeByGray",
+      "tagline": "Editorial Fashion Art",
+      "heroImage": "MadeByGray Poster Files/madebygray-hero.jpg",
+      "page": "madebygray.html"
+    }
+  ],
+  "products": [
+    {
+      "id": "laz-1",
+      "artistId": "laz-lewis",
+      "name": "Red Cliffs",
+      "description": "",
+      "images": ["Lazzy (1) 2x3.jpg", "0_First Listing Photo Updated.psd_0.png"]
+    },
+    {
+      "id": "laz-2",
+      "artistId": "laz-lewis",
+      "name": "Beach Drive",
+      "description": "",
+      "images": ["Lazzy (2) 2x3.jpg", "1_First Listing Photo Updated.psd_0.png"]
+    },
+    {
+      "id": "laz-3",
+      "artistId": "laz-lewis",
+      "name": "Canyon",
+      "description": "",
+      "images": ["Lazzy (3) 2x3 copy.jpg", "2_First Listing Photo Updated.psd_0.png"]
+    },
+    {
+      "id": "laz-4",
+      "artistId": "laz-lewis",
+      "name": "Dunes",
+      "description": "",
+      "images": ["Lazzy (4) 2x3.jpg", "3_First Listing Photo Updated.psd_0.png"]
+    },
+    {
+      "id": "laz-5",
+      "artistId": "laz-lewis",
+      "name": "Emerald Water",
+      "description": "",
+      "images": ["lazzy (5) 2x3 #2 Final.jpg", "lazzy (5) A1 Final.jpg"]
+    },
+    {
+      "id": "laz-6",
+      "artistId": "laz-lewis",
+      "name": "Coastal Haze",
+      "description": "",
+      "images": ["lazzy (6) 2x3.jpg", "lazzy (6) A1.jpg"]
+    },
+    {
+      "id": "laz-7",
+      "artistId": "laz-lewis",
+      "name": "Open Road",
+      "description": "",
+      "images": ["lazzy (7) 2x3.jpg", "lazzy (7) A1.jpg"]
+    },
+    {
+      "id": "laz-8",
+      "artistId": "laz-lewis",
+      "name": "Horizon",
+      "description": "",
+      "images": ["lazzy (8) 2x3.jpg", "lazzy (8) A1.jpg"]
+    },
+    {
+      "id": "gray-1",
+      "artistId": "madebygray",
+      "name": "Travis Scott",
+      "description": "",
+      "images": [
+        "MadeByGray Poster Files/Travis Scott - 2x3.jpg",
+        "MadeByGray Poster Files/MadeByGrayTravisScott1/0_First Listing Photo Updated copy.psd_0.png"
+      ]
+    },
+    {
+      "id": "gray-2",
+      "artistId": "madebygray",
+      "name": "Jordan Barrett",
+      "description": "",
+      "images": [
+        "MadeByGray Poster Files/Jordan Barrett - 2x3.jpg",
+        "MadeByGray Poster Files/MadeByGrayJordanBarrett1/0_First Listing Photo Updated copy.psd_0.png"
+      ]
+    },
+    {
+      "id": "gray-3",
+      "artistId": "madebygray",
+      "name": "Bape x KidSuper",
+      "description": "",
+      "images": [
+        "MadeByGray Poster Files/Bape x KidSuper - 2x3.jpg",
+        "MadeByGray Poster Files/MadeByGrayKidSuper1 /0_First Listing Photo Updated copy.psd_0.png"
+      ]
+    },
+    {
+      "id": "gray-4",
+      "artistId": "madebygray",
+      "name": "Sp5der Cuntry",
+      "description": "",
+      "images": [
+        "MadeByGray Poster Files/Sp5der Cuntry - 2x3.jpg",
+        "MadeByGray Poster Files/MadeByGraySp5derCuntry1/0_First Listing Photo Updated copy.psd_0.png"
+      ]
+    },
+    {
+      "id": "gray-5",
+      "artistId": "madebygray",
+      "name": "Dominic Fike",
+      "description": "",
+      "images": [
+        "MadeByGray Poster Files/sunburn dominic fike - 2x3.jpg",
+        "MadeByGray Poster Files/MadeByGrayDominicFike1/0_First Listing Photo Updated.psd_0.png"
+      ]
+    },
+    {
+      "id": "gray-6",
+      "artistId": "madebygray",
+      "name": "AT Vetement",
+      "description": "",
+      "images": [
+        "MadeByGray Poster Files/AT Vetement - 2x3.jpg",
+        "MadeByGray Poster Files/MadeByGrayVetement1/0_First Listing Photo Updated copy.psd_0.png"
+      ]
+    },
+    {
+      "id": "gray-7",
+      "artistId": "madebygray",
+      "name": "Yohji Yamamoto",
+      "description": "",
+      "images": [
+        "MadeByGray Poster Files/yohji yamamoto aw1998 - 2x3.jpg",
+        "MadeByGray Poster Files/MadeByGrayYohjiyamamoto1/0_First Listing Photo Updated copy.psd_0.png"
+      ]
+    }
+  ],
+  "sizes": [
+    { "label": "A4", "price": 21.76 },
+    { "label": "A3", "price": 27.48 },
+    { "label": "A2", "price": 33.21 },
+    { "label": "A1", "price": 38.93 }
+  ]
+}

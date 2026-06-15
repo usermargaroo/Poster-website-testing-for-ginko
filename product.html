@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ginko Posters</title>
+
+  <style>
+    @font-face {
+      font-family: 'Ginkopostersvol2';
+      src: url('Ginkopostersvol2-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --off-white: #f0ece4;
+      --black: #0e0e0e;
+      --mid-gray: #888;
+      --light-gray: #dedad3;
+      --font-display: 'Barlow Condensed', sans-serif;
+      --font-artist: 'Ginkopostersvol2', 'Barlow Condensed', sans-serif;
+      --font-body: 'Barlow', sans-serif;
+      --nav-h: 60px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    img { display: block; max-width: 100%; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+
+    body {
+      background: var(--off-white);
+      color: var(--black);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+    }
+
+    /* Grain */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.045;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 200px 200px;
+    }
+
+    /* ── Nav ─────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      z-index: 200;
+      background: rgba(240, 236, 228, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .nav-artist-name {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--black);
+    }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    .nav-right img { height: 36px; width: auto; }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--black);
+    }
+    .nav-links a:hover { opacity: 0.5; }
+    .nav-cart { display: flex; align-items: center; color: var(--black); transition: opacity 0.2s; position: relative; }
+    .nav-cart:hover { opacity: 0.5; }
+    .cart-badge { position: absolute; top: -7px; right: -8px; min-width: 15px; height: 15px; background: var(--black); color: var(--off-white); font-family: var(--font-display); font-size: 9px; font-weight: 800; border-radius: 8px; display: none; align-items: center; justify-content: center; padding: 0 3px; pointer-events: none; }
+    .cart-badge.visible { display: flex; }
+
+    /* ── Product layout ───────────────────────────────────── */
+    .product-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 100vh;
+      padding-top: var(--nav-h);
+    }
+
+    /* Left — scrollable images */
+    .product-images {
+      padding: 48px 40px 80px;
+    }
+    .product-images img {
+      width: 100%;
+      height: auto;
+      display: block;
+      margin-bottom: 12px;
+    }
+    .product-images img:last-child { margin-bottom: 0; }
+
+    /* Right — sticky panel */
+    .product-info {
+      position: sticky;
+      top: var(--nav-h);
+      height: calc(100vh - var(--nav-h));
+      overflow: hidden;
+      padding: 28px 44px 24px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--mid-gray);
+      margin-bottom: 16px;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--black); }
+
+    .product-name {
+      font-family: var(--font-display);
+      font-size: clamp(24px, 2.4vw, 36px);
+      font-weight: 800;
+      letter-spacing: 0.01em;
+      text-transform: uppercase;
+      line-height: 1;
+      margin-bottom: 18px;
+    }
+
+    /* Size */
+    .field-label {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--black);
+      margin-bottom: 8px;
+    }
+    .size-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+    .size-btn {
+      padding: 9px 6px;
+      border: 1.5px solid var(--light-gray);
+      background: transparent;
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--black);
+      line-height: 1.4;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s, color 0.15s;
+    }
+    .size-btn span {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      opacity: 0.7;
+      margin-top: 1px;
+    }
+    .size-btn:hover { border-color: var(--black); }
+    .size-btn.active {
+      background: var(--black);
+      border-color: var(--black);
+      color: var(--off-white);
+    }
+    .size-btn.active span { opacity: 0.85; }
+
+    /* Quantity */
+    .qty-row {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 14px;
+      border: 1.5px solid var(--light-gray);
+      width: fit-content;
+    }
+    .qty-btn {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--black);
+      background: transparent;
+      cursor: pointer;
+      transition: background 0.15s;
+      border: none;
+    }
+    .qty-btn:hover { background: var(--light-gray); }
+    .qty-display {
+      width: 44px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      border-left: 1.5px solid var(--light-gray);
+      border-right: 1.5px solid var(--light-gray);
+    }
+
+    /* Add to cart */
+    .add-to-cart {
+      width: 100%;
+      padding: 13px;
+      background: var(--black);
+      color: var(--off-white);
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: none;
+      transition: background 0.2s;
+      margin-bottom: 16px;
+    }
+    .add-to-cart:hover { background: #2a2a2a; }
+
+    /* Accordions */
+    .accordion-list { border-top: 1px solid var(--light-gray); }
+    .accordion-item { border-bottom: 1px solid var(--light-gray); }
+    .accordion-trigger {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--black);
+      background: none;
+      border: none;
+      cursor: pointer;
+      gap: 12px;
+    }
+    .accordion-trigger-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .accordion-trigger svg { opacity: 0.55; flex-shrink: 0; }
+    .accordion-chevron {
+      flex-shrink: 0;
+      transition: transform 0.25s;
+    }
+    .accordion-item.open .accordion-chevron { transform: rotate(180deg); }
+    .accordion-body {
+      display: none;
+      padding: 0 0 20px;
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--mid-gray);
+      line-height: 1.75;
+    }
+    .accordion-item.open .accordion-body { display: block; }
+
+    /* ── Footer ─────────────────────────────────────────────── */
+    footer {
+      background: var(--black);
+      padding: 0 44px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-brand {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--off-white);
+    }
+    .footer-links {
+      display: flex;
+      gap: 28px;
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(240,236,228,0.55);
+    }
+    .footer-links a:hover { color: var(--off-white); }
+    .footer-copy {
+      font-family: var(--font-display);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: rgba(240,236,228,0.4);
+    }
+
+    @media (max-width: 900px) {
+      .product-layout { grid-template-columns: 1fr; }
+      .product-info {
+        position: static;
+        height: auto;
+        border-left: none;
+        border-top: 1px solid var(--light-gray);
+      }
+      nav { padding: 0 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Nav ──────────────────────────────────────────────── -->
+  <nav>
+    <span class="nav-artist-name" id="nav-artist"></span>
+    <div class="nav-right">
+      <a href="index.html"><img src="ginko-logo.png" alt="Ginko Posters"></a>
+      <div class="nav-links">
+        <a href="index.html">Shop</a>
+        <a href="support.html">Support</a>
+        <a href="cart.html" class="nav-cart">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
+          </svg>
+          <span class="cart-badge" id="cart-badge"></span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── Main ─────────────────────────────────────────────── -->
+  <div class="product-layout">
+
+    <!-- Left: images -->
+    <div class="product-images" id="product-images"></div>
+
+    <!-- Right: info panel -->
+    <div class="product-info">
+      <a href="#" class="back-link" id="back-link">← Back to Store</a>
+      <h1 class="product-name" id="product-name"></h1>
+
+      <p class="field-label">Size</p>
+      <div class="size-grid" id="size-grid"></div>
+
+      <p class="field-label">Quantity</p>
+      <div class="qty-row">
+        <button class="qty-btn" id="qty-minus">−</button>
+        <div class="qty-display" id="qty-display">1</div>
+        <button class="qty-btn" id="qty-plus">+</button>
+      </div>
+
+      <button class="add-to-cart" id="add-to-cart-btn">Add to Cart</button>
+
+      <div class="accordion-list">
+        <div class="accordion-item" data-accordion="shipping">
+          <button class="accordion-trigger">
+            <span class="accordion-trigger-left">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
+              Shipping
+            </span>
+            <svg class="accordion-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="accordion-body">We ship worldwide. Shipping costs and delivery times depend on your location and local postal services.</div>
+        </div>
+        <div class="accordion-item" data-accordion="tracking">
+          <button class="accordion-trigger">
+            <span class="accordion-trigger-left">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+              Tracking
+            </span>
+            <svg class="accordion-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="accordion-body">Printed to order and dispatched within 2–4 business days. Tracking is provided within 24 hours after shipment.</div>
+        </div>
+        <div class="accordion-item" data-accordion="details">
+          <button class="accordion-trigger">
+            <span class="accordion-trigger-left">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8H3l1 13h16L21 8z"/><path d="M1 8h22"/><path d="M10 8V5a2 2 0 0 1 4 0v3"/></svg>
+              Product Details
+            </span>
+            <svg class="accordion-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="accordion-body">Printed on premium 200gsm+ matte paper using archival-quality inks for sharp detail and long-lasting colour. Each poster is printed to order and carefully packaged to arrive in perfect condition, ready to frame and display. Frame not included.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Footer ────────────────────────────────────────────── -->
+  <footer>
+    <span class="footer-brand" id="footer-brand">Ginko Posters</span>
+    <div class="footer-links">
+      <a href="index.html">All Products</a>
+      <a href="cart.html">Cart</a>
+      <a href="support.html">Support</a>
+      <a href="index.html#artists">Artists</a>
+      <a href="legal.html">Legal</a>
+    </div>
+    <span class="footer-copy">© 2026 GinkoPosters</span>
+  </footer>
+
+  <script>
+    // ── State ─────────────────────────────────────────────
+    const CART_KEY  = 'ginko_cart';
+    const params    = new URLSearchParams(window.location.search);
+    const pid       = params.get('p') || 'laz-1';
+    let   product   = null;
+    let   qty       = 1;
+
+    // ── Cart badge init ───────────────────────────────────
+    (function(){ try { const c=JSON.parse(localStorage.getItem(CART_KEY))||[]; const n=c.reduce((s,i)=>s+i.qty,0); const b=document.getElementById('cart-badge'); if(b&&n>0){b.textContent=n;b.classList.add('visible');} } catch{} })();
+
+    // ── Load product from API ─────────────────────────────
+    async function loadProduct() {
+      const res = await fetch(`/api/products/${pid}`);
+      if (!res.ok) {
+        document.getElementById('product-name').textContent = 'Product not found';
+        return;
+      }
+      product = await res.json();
+
+      document.title = `${product.name} — Ginko Posters`;
+      document.getElementById('nav-artist').textContent      = product.artistName || '';
+      document.getElementById('product-name').textContent    = product.name;
+      document.getElementById('footer-brand').textContent    = product.artistName || 'Ginko Posters';
+
+      const backLink = document.getElementById('back-link');
+      if (backLink) backLink.href = product.artistPage || 'index.html';
+
+      // Images
+      const imgContainer = document.getElementById('product-images');
+      imgContainer.innerHTML = '';
+      (product.images || []).forEach(src => {
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = product.name;
+        imgContainer.appendChild(img);
+      });
+
+      // Sizes from API
+      const sizeGrid = document.getElementById('size-grid');
+      sizeGrid.innerHTML = '';
+      (product.sizes || []).forEach((s, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'size-btn' + (i === 0 ? ' active' : '');
+        btn.innerHTML = `${s.label}<span>$${s.price.toFixed(2)}</span>`;
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+        });
+        sizeGrid.appendChild(btn);
+      });
+    }
+
+    loadProduct();
+
+    // ── Quantity ──────────────────────────────────────────
+    const qtyDisplay = document.getElementById('qty-display');
+    document.getElementById('qty-minus').addEventListener('click', () => {
+      if (qty > 1) { qty--; qtyDisplay.textContent = qty; }
+    });
+    document.getElementById('qty-plus').addEventListener('click', () => {
+      qty++;
+      qtyDisplay.textContent = qty;
+    });
+
+    // ── Add to Cart ───────────────────────────────────────
+    document.getElementById('add-to-cart-btn').addEventListener('click', () => {
+      if (!product) return;
+      const activeSize = document.querySelector('.size-btn.active');
+      const sizeLabel  = activeSize ? activeSize.childNodes[0].textContent.trim() : (product.sizes?.[0]?.label || 'A4');
+      const sizeObj    = (product.sizes || []).find(s => s.label === sizeLabel) || { price: 21.76 };
+
+      let cart = [];
+      try { cart = JSON.parse(localStorage.getItem(CART_KEY)) || []; } catch {}
+
+      const cartKey  = pid + '-' + sizeLabel;
+      const existing = cart.find(i => i.key === cartKey);
+      if (existing) {
+        existing.qty += qty;
+      } else {
+        cart.push({
+          key:    cartKey,
+          id:     pid,
+          name:   product.name,
+          artist: product.artistName || '',
+          size:   sizeLabel,
+          price:  sizeObj.price,
+          qty:    qty,
+          img:    product.images?.[0] || '',
+        });
+      }
+      localStorage.setItem(CART_KEY, JSON.stringify(cart));
+
+      // Update badge
+      const total = cart.reduce((s, i) => s + i.qty, 0);
+      const badge = document.getElementById('cart-badge');
+      if (badge) { badge.textContent = total; badge.classList.add('visible'); }
+
+      // Button feedback
+      const btn = document.getElementById('add-to-cart-btn');
+      btn.textContent = 'Added!';
+      setTimeout(() => { btn.textContent = 'Add to Cart'; }, 1400);
+    });
+
+    // ── Accordions ────────────────────────────────────────
+    document.querySelectorAll('.accordion-trigger').forEach(trigger => {
+      trigger.addEventListener('click', () => {
+        trigger.closest('.accordion-item').classList.toggle('open');
+      });
+    });
+  </script>
+
+</body>
+</html>

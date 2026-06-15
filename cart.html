@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart — Ginko Posters</title>
+
+  <style>
+    @font-face {
+      font-family: 'Ginkopostersvol2';
+      src: url('Ginkopostersvol2-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --off-white: #f0ece4;
+      --black: #0e0e0e;
+      --mid-gray: #888;
+      --light-gray: #dedad3;
+      --font-display: 'Barlow Condensed', sans-serif;
+      --font-body: 'Barlow', sans-serif;
+      --nav-h: 60px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    img { display: block; max-width: 100%; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+
+    body {
+      background: var(--off-white);
+      color: var(--black);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+    }
+
+    /* Grain */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.045;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 200px 200px;
+    }
+
+    /* ── Nav ─────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      z-index: 200;
+      background: rgba(240, 236, 228, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .nav-brand {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--black);
+    }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    .nav-right img { height: 36px; width: auto; }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--black);
+    }
+    .nav-links a:hover { opacity: 0.5; }
+    .nav-cart { display: flex; align-items: center; color: var(--black); transition: opacity 0.2s; position: relative; }
+    .nav-cart:hover { opacity: 0.5; }
+    .cart-badge {
+      position: absolute;
+      top: -7px; right: -8px;
+      min-width: 15px; height: 15px;
+      background: var(--black);
+      color: var(--off-white);
+      font-family: var(--font-display);
+      font-size: 9px; font-weight: 800;
+      border-radius: 8px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 0 3px;
+      pointer-events: none;
+    }
+    .cart-badge.visible { display: flex; }
+
+    /* ── Page ─────────────────────────────────────────────── */
+    .page {
+      padding-top: calc(var(--nav-h) + 52px);
+      padding-bottom: 120px;
+      padding-left: 52px;
+      padding-right: 52px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .cart-heading {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      margin-bottom: 40px;
+    }
+
+    /* ── Layout ───────────────────────────────────────────── */
+    .cart-layout {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 64px;
+      align-items: start;
+    }
+
+    /* ── Cart Items ───────────────────────────────────────── */
+    .cart-items { }
+
+    .cart-item {
+      display: grid;
+      grid-template-columns: 110px 1fr auto;
+      gap: 20px;
+      align-items: start;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--light-gray);
+      position: relative;
+    }
+    .cart-item:first-child { border-top: 1px solid var(--light-gray); }
+
+    .cart-thumb {
+      width: 110px;
+      height: 110px;
+      object-fit: cover;
+      background: var(--light-gray);
+    }
+
+    .cart-item-info { }
+    .cart-item-name {
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .cart-item-meta {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--mid-gray);
+      margin-bottom: 22px;
+      letter-spacing: 0.04em;
+    }
+
+    /* Qty stepper */
+    .cart-qty-row {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      border: 1.5px solid var(--light-gray);
+      width: fit-content;
+    }
+    .cart-qty-btn {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--black);
+      background: transparent;
+      transition: background 0.15s;
+    }
+    .cart-qty-btn:hover { background: var(--light-gray); }
+    .cart-qty-num {
+      width: 44px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      border-left: 1.5px solid var(--light-gray);
+      border-right: 1.5px solid var(--light-gray);
+    }
+
+    .cart-item-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 12px;
+      padding-top: 4px;
+    }
+    .cart-item-price {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    .cart-remove {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--mid-gray);
+      font-size: 18px;
+      font-weight: 300;
+      line-height: 1;
+      padding: 4px;
+      transition: color 0.2s;
+    }
+    .cart-remove:hover { color: var(--black); }
+
+    /* Empty state */
+    .cart-empty {
+      text-align: center;
+      padding: 80px 0;
+      grid-column: 1 / -1;
+    }
+    .cart-empty p {
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--mid-gray);
+      margin-bottom: 24px;
+    }
+    .cart-empty a {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--black);
+      border-bottom: 1.5px solid var(--black);
+      padding-bottom: 2px;
+    }
+
+    /* Continue shopping */
+    .continue-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--mid-gray);
+      margin-top: 20px;
+      transition: color 0.2s;
+    }
+    .continue-link:hover { color: var(--black); }
+
+    /* ── Order Summary ────────────────────────────────────── */
+    .order-summary {
+      border: 1.5px solid var(--light-gray);
+      padding: 28px 28px 0;
+      background: rgba(240, 236, 228, 0.5);
+    }
+    .summary-title {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--mid-gray);
+      border-top: 1px solid var(--light-gray);
+    }
+    .summary-row:first-of-type { border-top: none; }
+    .summary-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+      border-top: 1px solid var(--light-gray);
+      margin-top: 4px;
+    }
+    .summary-total-label {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .summary-total-price {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .checkout-btn {
+      display: block;
+      width: calc(100% + 56px);
+      margin: 0 -28px;
+      padding: 16px;
+      background: var(--black);
+      color: var(--off-white);
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      text-align: center;
+      cursor: pointer;
+      border: none;
+      transition: background 0.2s;
+      margin-top: 0;
+    }
+    .checkout-btn:hover { background: #2a2a2a; }
+
+    /* ── Footer ─────────────────────────────────────────────── */
+    footer {
+      background: var(--black);
+      padding: 0 44px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-brand {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--off-white);
+    }
+    .footer-links {
+      display: flex;
+      gap: 28px;
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(240,236,228,0.55);
+    }
+    .footer-links a:hover { color: var(--off-white); }
+    .footer-copy {
+      font-family: var(--font-display);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: rgba(240,236,228,0.4);
+    }
+
+    @media (max-width: 900px) {
+      .cart-layout { grid-template-columns: 1fr; gap: 40px; }
+      .page { padding-left: 20px; padding-right: 20px; }
+      nav { padding: 0 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Nav ──────────────────────────────────────────────── -->
+  <nav>
+    <a href="index.html" class="nav-brand">Ginko Posters</a>
+    <div class="nav-right">
+      <a href="index.html"><img src="ginko-logo.png" alt="Ginko Posters"></a>
+      <div class="nav-links">
+        <a href="index.html">Shop</a>
+        <a href="support.html">Support</a>
+        <a href="cart.html" class="nav-cart" style="opacity:0.4;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
+          </svg>
+          <span class="cart-badge" id="cart-badge"></span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── Content ───────────────────────────────────────────── -->
+  <div class="page">
+    <h1 class="cart-heading">Shopping Cart</h1>
+
+    <div class="cart-layout" id="cart-layout">
+      <!-- Filled by JS -->
+    </div>
+  </div>
+
+  <!-- ── Footer ────────────────────────────────────────────── -->
+  <footer>
+    <span class="footer-brand">Ginko Posters</span>
+    <div class="footer-links">
+      <a href="index.html">All Products</a>
+      <a href="cart.html">Cart</a>
+      <a href="support.html">Support</a>
+      <a href="index.html#artists">Artists</a>
+      <a href="legal.html">Legal</a>
+    </div>
+    <span class="footer-copy">© 2026 GinkoPosters</span>
+  </footer>
+
+  <script>
+    const CART_KEY = 'ginko_cart';
+
+    function getCart() {
+      try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; }
+      catch { return []; }
+    }
+
+    function saveCart(cart) {
+      localStorage.setItem(CART_KEY, JSON.stringify(cart));
+    }
+
+    function getTotal(cart) {
+      return cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+    }
+
+    function updateBadge() {
+      const cart = getCart();
+      const count = cart.reduce((s, i) => s + i.qty, 0);
+      const badge = document.getElementById('cart-badge');
+      if (badge) {
+        badge.textContent = count;
+        badge.classList.toggle('visible', count > 0);
+      }
+    }
+
+    function render() {
+      const cart = getCart();
+      const layout = document.getElementById('cart-layout');
+      layout.innerHTML = '';
+      updateBadge();
+
+      if (cart.length === 0) {
+        layout.innerHTML = `
+          <div class="cart-empty">
+            <p>Your cart is empty.</p>
+            <a href="index.html">← Continue Shopping</a>
+          </div>`;
+        return;
+      }
+
+      // Left: items
+      const leftCol = document.createElement('div');
+      leftCol.className = 'cart-items';
+
+      cart.forEach((item, idx) => {
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `
+          <img class="cart-thumb" src="${item.img}" alt="${item.name}">
+          <div class="cart-item-info">
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-meta">${item.size}</div>
+            <div class="cart-qty-row">
+              <button class="cart-qty-btn" data-action="minus" data-idx="${idx}">−</button>
+              <div class="cart-qty-num">${item.qty}</div>
+              <button class="cart-qty-btn" data-action="plus" data-idx="${idx}">+</button>
+            </div>
+          </div>
+          <div class="cart-item-right">
+            <div class="cart-item-price">$${(item.price * item.qty).toFixed(2)}</div>
+            <button class="cart-remove" data-action="remove" data-idx="${idx}">×</button>
+          </div>`;
+        leftCol.appendChild(div);
+      });
+
+      // Continue shopping link
+      const contLink = document.createElement('a');
+      contLink.href = 'index.html';
+      contLink.className = 'continue-link';
+      contLink.textContent = '← Continue Shopping';
+      leftCol.appendChild(contLink);
+
+      // Right: summary
+      const total = getTotal(cart);
+      const rightCol = document.createElement('div');
+      rightCol.className = 'order-summary';
+      rightCol.innerHTML = `
+        <div class="summary-title">Order Summary</div>
+        <div class="summary-row"><span>Subtotal</span><span>$${total.toFixed(2)}</span></div>
+        <div class="summary-row"><span>Shipping</span><span>Free</span></div>
+        <div class="summary-total-row">
+          <span class="summary-total-label">Total</span>
+          <span class="summary-total-price">$${total.toFixed(2)}</span>
+        </div>
+        <button class="checkout-btn">Proceed to Checkout</button>`;
+
+      layout.appendChild(leftCol);
+      layout.appendChild(rightCol);
+
+      // Bind qty / remove buttons
+      leftCol.querySelectorAll('[data-action]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const cart = getCart();
+          const i = parseInt(btn.dataset.idx);
+          const action = btn.dataset.action;
+          if (action === 'minus') {
+            if (cart[i].qty > 1) cart[i].qty--;
+            else cart.splice(i, 1);
+          } else if (action === 'plus') {
+            cart[i].qty++;
+          } else if (action === 'remove') {
+            cart.splice(i, 1);
+          }
+          saveCart(cart);
+          render();
+        });
+      });
+    }
+
+    render();
+  </script>
+
+</body>
+</html>
