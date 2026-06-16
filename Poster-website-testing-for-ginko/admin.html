@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ginko Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --off-white: #f0ece4;
+      --black: #0e0e0e;
+      --mid-gray: #888;
+      --light-gray: #dedad3;
+      --red: #c00;
+      --font-d: 'Barlow Condensed', sans-serif;
+      --font-b: 'Barlow', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--off-white); color: var(--black); font-family: var(--font-b); }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font-family: var(--font-b); }
+    img { display: block; }
+
+    /* ── Header ───────────────────────────────────────────── */
+    .hdr {
+      background: var(--black);
+      color: var(--off-white);
+      height: 56px;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .hdr-logo {
+      font-family: var(--font-d);
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+    .hdr-logo span { opacity: 0.35; }
+    .hdr-link {
+      font-family: var(--font-d);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(240,236,228,0.45);
+      transition: color 0.2s;
+    }
+    .hdr-link:hover { color: var(--off-white); }
+
+    /* ── Tabs ─────────────────────────────────────────────── */
+    .tabs {
+      background: var(--off-white);
+      border-bottom: 1px solid var(--light-gray);
+      padding: 0 40px;
+      display: flex;
+    }
+    .tab {
+      padding: 14px 0;
+      margin-right: 36px;
+      font-family: var(--font-d);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--mid-gray);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s;
+    }
+    .tab.active { color: var(--black); border-bottom-color: var(--black); }
+
+    /* ── Content ──────────────────────────────────────────── */
+    .content { padding: 40px; max-width: 1200px; margin: 0 auto; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── Section header ───────────────────────────────────── */
+    .sec-hdr {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+    }
+    .sec-title {
+      font-family: var(--font-d);
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+    .sec-count {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--mid-gray);
+      margin-left: 8px;
+    }
+
+    /* ── Buttons ──────────────────────────────────────────── */
+    .btn {
+      padding: 10px 22px;
+      font-family: var(--font-d);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, opacity 0.2s;
+    }
+    .btn-black { background: var(--black); color: var(--off-white); }
+    .btn-black:hover { background: #2a2a2a; }
+    .btn-outline {
+      background: transparent;
+      color: var(--black);
+      border: 1.5px solid var(--light-gray);
+    }
+    .btn-outline:hover { border-color: var(--black); }
+    .btn-sm { padding: 7px 14px; font-size: 11px; }
+    .btn-red {
+      background: transparent;
+      color: var(--red);
+      border: 1.5px solid var(--red);
+    }
+    .btn-red:hover { background: var(--red); color: white; }
+
+    /* ── Artists grid ─────────────────────────────────────── */
+    .artists-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .artist-card {
+      border: 1.5px solid var(--light-gray);
+      background: white;
+      overflow: hidden;
+    }
+    .artist-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background: var(--light-gray);
+    }
+    .artist-card-body { padding: 18px; }
+    .artist-card-name {
+      font-family: var(--font-d);
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .artist-card-tag {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--mid-gray);
+      margin-bottom: 16px;
+    }
+    .card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    /* ── Filter bar ───────────────────────────────────────── */
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .filter-label {
+      font-family: var(--font-d);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--mid-gray);
+    }
+    .filter-select {
+      padding: 8px 14px;
+      border: 1.5px solid var(--light-gray);
+      background: var(--off-white);
+      font-family: var(--font-d);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--black);
+      cursor: pointer;
+      outline: none;
+    }
+
+    /* ── Products grid ────────────────────────────────────── */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 16px;
+    }
+    .prod-card {
+      border: 1.5px solid var(--light-gray);
+      background: white;
+      overflow: hidden;
+    }
+    .prod-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      background: var(--light-gray);
+    }
+    .prod-card-body { padding: 12px; }
+    .prod-card-name {
+      font-family: var(--font-d);
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    .prod-card-artist {
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--mid-gray);
+      margin-bottom: 10px;
+    }
+
+    /* ── Settings ─────────────────────────────────────────── */
+    .settings-card {
+      border: 1.5px solid var(--light-gray);
+      background: white;
+      padding: 28px;
+      max-width: 420px;
+      margin-bottom: 32px;
+    }
+    .settings-card-title {
+      font-family: var(--font-d);
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .size-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--light-gray);
+    }
+    .size-row:first-of-type { border-top: 1px solid var(--light-gray); }
+    .size-label {
+      font-family: var(--font-d);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+    }
+    .price-input {
+      width: 90px;
+      padding: 6px 10px;
+      border: 1.5px solid var(--light-gray);
+      background: var(--off-white);
+      font-family: var(--font-b);
+      font-size: 14px;
+      text-align: right;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .price-input:focus { border-color: var(--black); }
+
+    /* ── Modal ────────────────────────────────────────────── */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(14,14,14,0.65);
+      z-index: 500;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .overlay.open { display: flex; }
+    .modal {
+      background: var(--off-white);
+      width: 100%;
+      max-width: 580px;
+      max-height: 90vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    .modal-hdr {
+      padding: 24px 28px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--light-gray);
+      flex-shrink: 0;
+    }
+    .modal-title {
+      font-family: var(--font-d);
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 26px;
+      font-weight: 300;
+      color: var(--mid-gray);
+      line-height: 1;
+      cursor: pointer;
+    }
+    .modal-close:hover { color: var(--black); }
+    .modal-body { padding: 24px 28px; flex: 1; }
+    .modal-ftr {
+      padding: 18px 28px;
+      border-top: 1px solid var(--light-gray);
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      flex-shrink: 0;
+    }
+
+    /* ── Form ─────────────────────────────────────────────── */
+    .fg { margin-bottom: 20px; }
+    .fl {
+      display: block;
+      font-family: var(--font-d);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      margin-bottom: 7px;
+    }
+    .fi, .ft, .fs {
+      width: 100%;
+      padding: 10px 13px;
+      border: 1.5px solid var(--light-gray);
+      background: white;
+      font-family: var(--font-b);
+      font-size: 14px;
+      color: var(--black);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .fi:focus, .ft:focus, .fs:focus { border-color: var(--black); }
+    .ft { height: 80px; resize: vertical; }
+
+    .img-row {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+    .img-thumb {
+      width: 88px;
+      height: 88px;
+      object-fit: cover;
+      border: 1.5px solid var(--light-gray);
+      background: var(--light-gray);
+      flex-shrink: 0;
+    }
+    .img-controls { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+    .upload-btn {
+      padding: 8px 14px;
+      background: var(--black);
+      color: var(--off-white);
+      font-family: var(--font-d);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      width: fit-content;
+    }
+    .upload-hint { font-size: 11px; color: var(--mid-gray); }
+
+    /* ── Empty / loading ──────────────────────────────────── */
+    .empty {
+      text-align: center;
+      padding: 60px;
+      color: var(--mid-gray);
+      font-size: 14px;
+      font-weight: 300;
+      grid-column: 1 / -1;
+    }
+    .spinner {
+      text-align: center;
+      padding: 60px;
+      font-family: var(--font-d);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--mid-gray);
+      grid-column: 1 / -1;
+    }
+
+    /* ── Toast ────────────────────────────────────────────── */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: var(--black);
+      color: var(--off-white);
+      font-family: var(--font-d);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 12px 22px;
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.22s, transform 0.22s;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    input[type="file"] { display: none; }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="hdr">
+    <div class="hdr-logo">Ginko Posters <span>— Admin</span></div>
+    <a href="index.html" class="hdr-link">← View Site</a>
+  </header>
+
+  <!-- Tabs -->
+  <nav class="tabs">
+    <button class="tab active" data-tab="artists">Artists</button>
+    <button class="tab" data-tab="products">Products</button>
+    <button class="tab" data-tab="settings">Settings</button>
+  </nav>
+
+  <div class="content">
+
+    <!-- ── Artists ────────────────────────────────────────── -->
+    <div class="tab-panel active" id="panel-artists">
+      <div class="sec-hdr">
+        <div><span class="sec-title">Artists</span><span class="sec-count" id="artist-count"></span></div>
+        <button class="btn btn-black" onclick="openArtistModal(null)">+ Add Artist</button>
+      </div>
+      <div class="artists-grid" id="artists-grid">
+        <div class="spinner">Loading…</div>
+      </div>
+    </div>
+
+    <!-- ── Products ───────────────────────────────────────── -->
+    <div class="tab-panel" id="panel-products">
+      <div class="sec-hdr">
+        <div><span class="sec-title">Products</span><span class="sec-count" id="product-count"></span></div>
+        <button class="btn btn-black" onclick="openProductModal(null)">+ Add Product</button>
+      </div>
+      <div class="filter-bar">
+        <span class="filter-label">Artist</span>
+        <select class="filter-select" id="artist-filter" onchange="loadProducts()">
+          <option value="">All Artists</option>
+        </select>
+      </div>
+      <div class="products-grid" id="products-grid">
+        <div class="spinner">Loading…</div>
+      </div>
+    </div>
+
+    <!-- ── Settings ───────────────────────────────────────── -->
+    <div class="tab-panel" id="panel-settings">
+      <div class="sec-hdr">
+        <span class="sec-title">Settings</span>
+      </div>
+      <div class="settings-card">
+        <div class="settings-card-title">Global Print Sizes &amp; Prices</div>
+        <div id="sizes-list"></div>
+        <div style="margin-top: 20px;">
+          <button class="btn btn-black btn-sm" onclick="saveSizes()">Save Prices</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Modal ──────────────────────────────────────────── -->
+  <div class="overlay" id="overlay" onclick="overlayClick(event)">
+    <div class="modal">
+      <div class="modal-hdr">
+        <span class="modal-title" id="modal-title">Edit</span>
+        <button class="modal-close" onclick="closeModal()">×</button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+      <div class="modal-ftr">
+        <button class="btn btn-outline btn-sm" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-black btn-sm" id="save-btn" onclick="saveModal()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden file inputs -->
+  <input type="file" id="file-0" accept="image/*" onchange="handleUpload(0,this)">
+  <input type="file" id="file-1" accept="image/*" onchange="handleUpload(1,this)">
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ── State ─────────────────────────────────────────────
+    let artists      = [];
+    let products     = [];
+    let sizes        = [];
+    let modalMode    = null;
+    let editingId    = null;
+    let pendingImgs  = [null, null];
+
+    // ── Boot ──────────────────────────────────────────────
+    (async () => {
+      await Promise.all([loadArtists(), loadSizes()]);
+      await loadProducts();
+    })();
+
+    // ── Tabs ──────────────────────────────────────────────
+    document.querySelectorAll('.tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+      });
+    });
+
+    // ── Artists ───────────────────────────────────────────
+    async function loadArtists() {
+      const r = await fetch('/api/artists');
+      artists  = await r.json();
+      document.getElementById('artist-count').textContent = `(${artists.length})`;
+
+      // Populate filter
+      const sel = document.getElementById('artist-filter');
+      const cur = sel.value;
+      sel.innerHTML = '<option value="">All Artists</option>' +
+        artists.map(a => `<option value="${a.id}"${a.id===cur?' selected':''}>${a.name}</option>`).join('');
+
+      renderArtists();
+    }
+
+    function renderArtists() {
+      const g = document.getElementById('artists-grid');
+      if (!artists.length) {
+        g.innerHTML = '<div class="empty">No artists yet — add one above.</div>';
+        return;
+      }
+      g.innerHTML = artists.map(a => `
+        <div class="artist-card">
+          <img src="${a.heroImage || ''}" alt="${a.name}" onerror="this.style.background='#dedad3';this.src=''">
+          <div class="artist-card-body">
+            <div class="artist-card-name">${a.name}</div>
+            <div class="artist-card-tag">${a.tagline || '—'}</div>
+            <div class="card-actions">
+              <button class="btn btn-outline btn-sm" onclick="openArtistModal('${a.id}')">Edit</button>
+              <a class="btn btn-outline btn-sm" href="${a.page}" target="_blank" style="display:inline-flex;align-items:center;">View →</a>
+              <button class="btn btn-red btn-sm" onclick="deleteArtist('${a.id}')">Delete</button>
+            </div>
+          </div>
+        </div>`).join('');
+    }
+
+    function openArtistModal(id) {
+      const a   = id ? artists.find(x => x.id === id) : null;
+      editingId = id;
+      modalMode = id ? 'artist-edit' : 'artist-add';
+      pendingImgs = [null, null];
+
+      document.getElementById('modal-title').textContent = id ? 'Edit Artist' : 'Add Artist';
+      document.getElementById('modal-body').innerHTML = `
+        <div class="fg">
+          <label class="fl">Artist Name</label>
+          <input class="fi" id="f-name" value="${a?.name||''}" placeholder="e.g. John Doe">
+        </div>
+        <div class="fg">
+          <label class="fl">Tagline</label>
+          <input class="fi" id="f-tagline" value="${a?.tagline||''}" placeholder="e.g. Street Photography">
+        </div>
+        <div class="fg">
+          <label class="fl">Hero / Landing Image</label>
+          <div class="img-row">
+            <img class="img-thumb" id="prev-0" src="${a?.heroImage||''}" onerror="this.style.background='#dedad3';this.src=''">
+            <div class="img-controls">
+              <button class="upload-btn" onclick="document.getElementById('file-0').click()">↑ Upload Image</button>
+              <input class="fi" id="f-hero" value="${a?.heroImage||''}" placeholder="or paste file path" oninput="setPreview(0,this.value)">
+              <span class="upload-hint">Recommended: 1600×900px or wider</span>
+            </div>
+          </div>
+        </div>`;
+      openModal();
+    }
+
+    async function saveArtist() {
+      const name = document.getElementById('f-name').value.trim();
+      if (!name) return toast('Name is required');
+
+      const data = {
+        name,
+        tagline:   document.getElementById('f-tagline').value.trim(),
+        heroImage: pendingImgs[0] || document.getElementById('f-hero').value.trim()
+      };
+
+      let resp;
+      if (editingId) {
+        resp = await fetch(`/api/artists/${editingId}`, {
+          method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data)
+        });
+        toast('Artist updated');
+      } else {
+        resp = await fetch('/api/artists', {
+          method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data)
+        });
+        const result = await resp.json();
+        if (resp.ok) toast(`Artist added — page created: ${result.page}`);
+        else return toast(result.error || 'Error');
+      }
+
+      closeModal();
+      await loadArtists();
+    }
+
+    async function deleteArtist(id) {
+      const a = artists.find(x => x.id === id);
+      if (!confirm(`Delete "${a?.name}"? This will also delete all their products.`)) return;
+      await fetch(`/api/artists/${id}`, { method: 'DELETE' });
+      toast('Artist deleted');
+      await loadArtists();
+      await loadProducts();
+    }
+
+    // ── Products ──────────────────────────────────────────
+    async function loadProducts() {
+      const filt = document.getElementById('artist-filter')?.value || '';
+      const url  = filt ? `/api/products?artistId=${filt}` : '/api/products';
+      const r    = await fetch(url);
+      products   = await r.json();
+      document.getElementById('product-count').textContent = `(${products.length})`;
+      renderProducts();
+    }
+
+    function renderProducts() {
+      const g = document.getElementById('products-grid');
+      if (!products.length) {
+        g.innerHTML = '<div class="empty">No products — add one above.</div>';
+        return;
+      }
+      g.innerHTML = products.map(p => {
+        const artist = artists.find(a => a.id === p.artistId);
+        return `
+          <div class="prod-card">
+            <img src="${p.images?.[0]||''}" alt="${p.name}" onerror="this.style.background='#dedad3';this.src=''">
+            <div class="prod-card-body">
+              <div class="prod-card-name">${p.name}</div>
+              <div class="prod-card-artist">${artist?.name || p.artistId}</div>
+              <div class="card-actions">
+                <button class="btn btn-outline btn-sm" onclick="openProductModal('${p.id}')">Edit</button>
+                <button class="btn btn-red btn-sm" onclick="deleteProduct('${p.id}')">✕</button>
+              </div>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    function openProductModal(id) {
+      const p   = id ? products.find(x => x.id === id) : null;
+      editingId = id;
+      modalMode = id ? 'product-edit' : 'product-add';
+      pendingImgs = [null, null];
+
+      document.getElementById('modal-title').textContent = id ? 'Edit Product' : 'Add Product';
+      document.getElementById('modal-body').innerHTML = `
+        <div class="fg">
+          <label class="fl">Product Name</label>
+          <input class="fi" id="f-name" value="${p?.name||''}" placeholder="e.g. Red Cliffs">
+        </div>
+        <div class="fg">
+          <label class="fl">Artist</label>
+          <select class="fs" id="f-artist">
+            ${artists.map(a => `<option value="${a.id}"${a.id===p?.artistId?' selected':''}>${a.name}</option>`).join('')}
+          </select>
+        </div>
+        <div class="fg">
+          <label class="fl">Description (optional)</label>
+          <textarea class="ft" id="f-desc" placeholder="Short description of this print...">${p?.description||''}</textarea>
+        </div>
+        <div class="fg">
+          <label class="fl">Main Poster Image</label>
+          <div class="img-row">
+            <img class="img-thumb" id="prev-0" src="${p?.images?.[0]||''}" onerror="this.style.background='#dedad3';this.src=''">
+            <div class="img-controls">
+              <button class="upload-btn" onclick="document.getElementById('file-0').click()">↑ Upload Image</button>
+              <input class="fi" id="f-img0" value="${p?.images?.[0]||''}" placeholder="or paste file path" oninput="setPreview(0,this.value)">
+              <span class="upload-hint">The poster itself — 2:3 ratio recommended</span>
+            </div>
+          </div>
+        </div>
+        <div class="fg">
+          <label class="fl">Wall Mockup Image (hover)</label>
+          <div class="img-row">
+            <img class="img-thumb" id="prev-1" src="${p?.images?.[1]||''}" onerror="this.style.background='#dedad3';this.src=''">
+            <div class="img-controls">
+              <button class="upload-btn" onclick="document.getElementById('file-1').click()">↑ Upload Image</button>
+              <input class="fi" id="f-img1" value="${p?.images?.[1]||''}" placeholder="or paste file path" oninput="setPreview(1,this.value)">
+              <span class="upload-hint">Shown on hover — the poster in a room / frame</span>
+            </div>
+          </div>
+        </div>`;
+      openModal();
+    }
+
+    async function saveProduct() {
+      const name = document.getElementById('f-name').value.trim();
+      if (!name) return toast('Name is required');
+
+      const data = {
+        name,
+        artistId:    document.getElementById('f-artist').value,
+        description: document.getElementById('f-desc').value.trim(),
+        images: [
+          pendingImgs[0] || document.getElementById('f-img0').value.trim(),
+          pendingImgs[1] || document.getElementById('f-img1').value.trim()
+        ].filter(Boolean)
+      };
+
+      if (editingId) {
+        await fetch(`/api/products/${editingId}`, {
+          method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data)
+        });
+        toast('Product updated');
+      } else {
+        await fetch('/api/products', {
+          method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data)
+        });
+        toast('Product added');
+      }
+
+      closeModal();
+      await loadProducts();
+    }
+
+    async function deleteProduct(id) {
+      const p = products.find(x => x.id === id);
+      if (!confirm(`Delete "${p?.name}"?`)) return;
+      await fetch(`/api/products/${id}`, { method: 'DELETE' });
+      toast('Product deleted');
+      await loadProducts();
+    }
+
+    // ── Sizes / Settings ──────────────────────────────────
+    async function loadSizes() {
+      const r = await fetch('/api/sizes');
+      sizes   = await r.json();
+      renderSizes();
+    }
+
+    function renderSizes() {
+      const el = document.getElementById('sizes-list');
+      if (!el) return;
+      el.innerHTML = sizes.map((s, i) => `
+        <div class="size-row">
+          <span class="size-label">${s.label}</span>
+          <input class="price-input" id="sz-${i}" type="number" step="0.01" min="0" value="${s.price}">
+        </div>`).join('');
+    }
+
+    async function saveSizes() {
+      const updated = sizes.map((s, i) => ({
+        ...s,
+        price: parseFloat(document.getElementById(`sz-${i}`).value) || s.price
+      }));
+      await fetch('/api/sizes', {
+        method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(updated)
+      });
+      sizes = updated;
+      toast('Prices saved');
+    }
+
+    // ── Image upload ──────────────────────────────────────
+    async function handleUpload(idx, input) {
+      const file = input.files[0];
+      if (!file) return;
+      const fd = new FormData();
+      fd.append('image', file);
+      toast('Uploading…');
+      const r    = await fetch('/api/upload', { method: 'POST', body: fd });
+      const data = await r.json();
+      pendingImgs[idx] = data.path;
+      setPreview(idx, data.path);
+      const fieldId = idx === 0 ? (modalMode?.startsWith('artist') ? 'f-hero' : 'f-img0') : 'f-img1';
+      const field = document.getElementById(fieldId);
+      if (field) field.value = data.path;
+      toast('Image uploaded');
+      input.value = '';
+    }
+
+    function setPreview(idx, src) {
+      const el = document.getElementById(`prev-${idx}`);
+      if (el) { el.src = src; el.style.background = ''; }
+    }
+
+    // ── Modal ─────────────────────────────────────────────
+    function openModal()  { document.getElementById('overlay').classList.add('open'); }
+    function closeModal() {
+      document.getElementById('overlay').classList.remove('open');
+      editingId = null; modalMode = null; pendingImgs = [null, null];
+    }
+    function overlayClick(e) { if (e.target === document.getElementById('overlay')) closeModal(); }
+
+    async function saveModal() {
+      if (modalMode?.startsWith('artist'))  await saveArtist();
+      if (modalMode?.startsWith('product')) await saveProduct();
+    }
+
+    // ── Toast ─────────────────────────────────────────────
+    let toastT;
+    function toast(msg) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      clearTimeout(toastT);
+      toastT = setTimeout(() => el.classList.remove('show'), 2600);
+    }
+  </script>
+</body>
+</html>
